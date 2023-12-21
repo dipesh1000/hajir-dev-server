@@ -1,0 +1,339 @@
+Aalok Dai, [3/6/2022 2:19 PM]
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<style>
+    .selectedFileBox {
+        position: relative;
+        width: 100px;
+    }
+
+    .selectedFileBox::after {
+        content: "x";
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        background: #6c6464;
+        color: #FFF;
+        padding: 0px 3px;
+        border-radius: 100%;
+        cursor: pointer;
+    }
+
+    .medialibraryModal .nav-tabs {}
+
+    .medialibraryModal .nav-tabs li a {
+        padding: 5px 12px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .medialibraryModal .modal-header {
+        border-bottom: none;
+        padding: 5px 10px;
+    }
+
+    .medialibraryModal .modal-header .modal-title {
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .medialibraryModal .modal-body {
+        padding-top: 0px;
+    }
+
+    .medialibraryfiltersection {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .medialibraryfiltersection h4 {
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 2px;
+    }
+
+    .medialibraryfiltersection select,
+    .medialibraryfiltersection input {
+        border-radius: 0px;
+        height: auto;
+        max-width: 200px;
+    }
+
+    .medialibraryfilesection {
+        margin-top: 20px;
+        height: calc(100vh - 200px);
+        overflow-y: scroll;
+    }
+
+    .medialibraryfilesection ul {
+        margin: 0px;
+        padding: 0px;
+        list-style: none;
+        display: flex;
+        flex-flow: row wrap;
+    }
+
+    .medialibraryfilesection ul .libraryfilediv {
+
+        border: 5px solid #fff;
+        display: inline-block;
+        cursor: pointer;
+        width: 33.33%;
+
+    }
+
+    .medialibraryfilesection ul .libraryfilediv.selectedmedia {
+        border-color: #2271b1;
+        position: relative;
+    }
+
+    .medialibraryfilesection ul .libraryfilediv.selectedmedia::before {
+        content: "✓";
+        position: absolute;
+        background-color: #2271b1;
+        color: #FFF;
+        right: 0px;
+        top: 0px;
+    }
+
+    .medialibraryModal {
+        width: 100% !important;
+    }
+
+    .medialibraryModal .loardmoremedia {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+
+
+    @media (min-width: 992px) {
+        .medialibraryfilesection ul .libraryfilediv {
+            width: 12.5%;
+        }
+    }
+
+    .medialibraryfilesection .libraryfilediv img {
+        height: 100%;
+        width: 100%;
+    }
+
+    .medialibraryDetails {}
+
+    .medialibraryDetails h4 {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .medialibraryDetails .attachment-file {
+        margin-bottom: 10px;
+    }
+
+
+    .medialibraryDetails .attachment-file img {
+        width: 100%;
+        border: 2px solid #CCC;
+        margin-bottom: 10px;
+    }
+
+    .medialibraryDetails .attachment-file ul {
+        padding: 0px;
+        margin: 0px;
+        list-style: none;
+    }
+
+
+    .medialibraryDetails .attachment-file ul li {
+        font-size: 13px;
+        line-height: 18px;
+        color: rgb(86 73 73)
+    }
+
+    .medialibraryDetails .attachment-file ul li.attachment-name {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 3px;
+        line-height: 18px;
+        color: rgb(0, 0, 0);
+    }
+
+Aalok Dai, [3/6/2022 2:19 PM]
+.medialibraryDetails .attachment-file ul li.set-feature-image {
+        display: inline-block;
+        text-decoration: none;
+        margin: 0;
+        cursor: pointer;
+        border-width: 1px;
+        border-style: solid;
+        -webkit-appearance: none;
+        border-radius: 3px;
+        box-sizing: border-box;
+        color: #2271b1;
+        border-color: #2271b1;
+        background: #f6f7f7;
+        vertical-align: top;
+        font-size: 11px;
+        padding: 1px 5px;
+        margin-top: 10px;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <h2>Modal Example</h2>
+        <!-- Trigger the modal with a button -->
+        <button type="button" class="btn btn-info btn-lg openMediaLibrary">Open Modal</button>
+        <div class="selectedFileContainer">
+
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog medialibraryModal modal-lg" style="position: fixed;">
+
+                <!-- Modal content-->
+                <div class="modal-content ">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Features Image</h4>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="nav nav-tabs">
+                            <li><a data-toggle="tab" href="#medialibraryUpload">Upload Files</a></li>
+                            <li class="active"><a data-toggle="tab" href="#medialibraryselect">Media Library</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="medialibraryUpload" class="tab-pane fade ">
+                                <h3>HOME</h3>
+                                <p>Some content.</p>
+                            </div>
+                            <div id="medialibraryselect" class="tab-pane fade in active">
+                                <div class="row">
+                                    <div class="col-sm-9">
+                                        <div class="medialibraryfiltersection">
+                                            <div class="filterSection">
+                                                <h4>
+                                                    Filter Media
+                                                </h4>
+                                                <div class="filter-select">
+                                                    <select class="form-control">
+                                                        <option value="allfiles">All Files</option>
+                                                        <option value="image">Images</option>
+                                                        <option value="video">Videos</option>
+                                                        <option value="audio">Audios</option>
+                                                        <option value="archive">Archives</option>
+                                                        <option value="document">Documents</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="filterSection">
+                                                <h4>Search</h4>
+                                                <div class="filter-search">
+                                                    <input type="search" name="search" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="medialibraryfilesection">
+                                            <ul>
+                                                <li class="libraryfilediv selectedmedia" data-file-id="1"
+
+Aalok Dai, [3/6/2022 2:19 PM]
+data-file-type="image" data-file-size="2000"
+                                                    data-file-extension="jpeg" data-file-uploadat="2020-feb=02"
+                                                    data-file-path="http://localhost/ndckhabar/wp-content/uploads/2022/02/sugar-1.jpg">
+                                                    <img
+                                                        src="http://localhost/ndckhabar/wp-content/uploads/2022/02/sugar-1.jpg">
+                                                </li>
+                                            </ul>
+                                            <div class="loardmoremedia">
+                                                <button class="btn-sm btn btn-primary"> Load More</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="medialibraryDetails">
+                                            <h4>ATTACHMENT DETAILS</h4>
+                                            <div class="attachment-file">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <script>
+        $(document).on('click', '.openMediaLibrary', function (e) {
+            e.preventDefault();
+            var openingModalThis = $(this);
+            $('#MediaModal').modal('show');
+            $(document).on('click', '.addMediaButton', function (e) {
+                var mediaButtonThis = $(this);
+                var dataID = mediaButtonThis.attr('data-file-id');
+                var dataType = mediaButtonThis.attr('data-file-type');
+                var dataPath = mediaButtonThis.attr('data-file-path');
+                var variable = "<div class='selectedFileBox'><input type='hidden' value='" + dataID + "' class='selectedfileid'>" +
+                    "<img src='" + dataPath + "' style='width: 50px;'></div>";
+                openingModalThis.siblings('.selectedFileContainer').html(variable);
+                $('#MediaModal').modal('hide');
+            });
+
+        });
+
+        $(document).on('click', '.medialibraryfilesection ul .libraryfilediv', function (e) {
+            e.preventDefault();
+            $(".medialibraryfilesection ul .libraryfilediv").removeClass('selectedmedia');
+            $(this).addClass("selectedmedia");
+            var dataID = $(this).attr('data-file-id');
+            var dataType = $(this).attr('data-file-type');
+            var dataPath = $(this).attr('data-file-path');
+            var dataSIze = $(this).attr('data-file-size');
+            var dataExtension = $(this).attr('data-file-extension');
+            var dataDate = $(this).attr('data-file-uploadat');
+
+            var attachmentVariable = '<img src="' + dataPath + '">' +
+                '<ul>' +
+                '<li class="attachment-name">' + dataType +
+                '</li>' +
+                '<li>' + dataDate +
+                '</li>' +
+                '<li>' + dataExtension +
+                '</li>' +
+                '<li>' + dataSIze +
+                '</li>' +
+                '<li data-file-path="' + dataPath + '" data-file-id="'+ dataID +'"' + 
+                'class="addMediaButton set-feature-image">' +
+                'Set Feature Image' +
+                '</li>' +
+                '</ul>';
+
+            $(".medialibraryDetails .attachment-file").html(attachmentVariable);
+        });
+
+        
+
+    </script>
+</body>
+
+</html>
