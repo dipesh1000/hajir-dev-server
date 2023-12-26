@@ -50,7 +50,7 @@
                                     {{-- {{ substr($user->name, 0, 1) }} --}}
                                 </div>
                             @endif
-                            <p class="">{{ $user->firstname ?? '' }}</p>
+                            <p class="">{{ $user->name ?? '' }}</p>
                         </div>
                         <div class="user-info-list">
 
@@ -117,10 +117,10 @@
                                         <div class="col-sm-6 mb-4">
                                             {{-- @dd($user); --}}
                                             <label for="fullName">Full Name</label>
-                                            <input type="text" name="firstname" class="form-control" id="fullName"
-                                                placeholder="Enter Your Full Name" value="{{ $user->firstname ?? old('firstname') }}"
+                                            <input type="text" name="name" class="form-control" id="fullName"
+                                                placeholder="Enter Your Full Name" value="{{ $user->name ?? old('name') }}"
                                                 required>
-                                            @error('firstname')
+                                            @error('name')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
 

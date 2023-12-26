@@ -27,7 +27,7 @@
         <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
             <div class="widget-content widget-content-area br-6">
                 <div class="col-12">
-                    <h5 style="display: inline;">Edit {{ $companyCandidate->candidate->firstname}}</h5>
+                    <h5 style="display: inline;">Edit {{ $companyCandidate->candidate->name}}</h5>
                     <a class="btn btn-secondary float-right " href="{{ route('employer.company.viewEmployees',$companyCandidate->company->slug) }}">Previous Page</a>
                 </div>
                 <hr>

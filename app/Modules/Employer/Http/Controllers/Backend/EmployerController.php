@@ -51,7 +51,7 @@ class EmployerController extends Controller
             // dd($request->all());
             $user = User::where('id', Auth::guard('web')->id())->first();
             if ($user) {
-                $user->firstname = $request->firstname;
+                $user->name = $request->name;
                 $user->email = $request->email;
                 $user->address = $request->address;
                 $user->dob = Carbon::parse($request->dob);
@@ -61,7 +61,7 @@ class EmployerController extends Controller
                 }
                 if ($user->update()) {
                     $employer = Employer::where('user_id', $user->id)->first();
-                    $employer->name = $request->firstname;
+                    $employer->name = $request->name;
                     $employer->email = $request->email;
 
                     if ($request->profile_image) {

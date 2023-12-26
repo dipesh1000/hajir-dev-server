@@ -27,7 +27,7 @@ class CandidateLeaveResource extends JsonResource
             'end_date' => $this->end_date->format('d M Y'),
             'application_date' => $this->created_at->format('d M Y'),
             'document_url' => $this->document?url(getFileUrlByUploads($this->document)):null,
-            'name' => $this->candidate->firstname??'',
+            'name' => $this->candidate->name??'',
 
         ];
     }

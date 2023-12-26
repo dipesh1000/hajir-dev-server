@@ -19,7 +19,7 @@ class CompanyCandidateDailyAttendanceReport extends JsonResource
             'id' => $this->id ?? null,
             'company_id' => $this->company_id,
             'candidate_id' => $this->candidate_id,
-            'name' => $this->firstname .' '. $this->lastname,
+            'name' => $this->name,
             'phone' => $this->candidate->phone ?? null,
             'start_time' => $this->companyCandidateAttendaces->start_time ?? null,
             'end_time' => $this->companyCandidateAttendaces->end_time ?? null,

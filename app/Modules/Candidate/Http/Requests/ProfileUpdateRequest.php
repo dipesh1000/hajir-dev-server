@@ -26,8 +26,8 @@ class ProfileUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'firstname' => 'required',
-            'lastname' => 'required',
+            'name' => 'required',
+            // 'lastname' => 'required',
             'email' => 'required|email',
             'dob' => 'required',
             'uploadfile' => 'image|mimes:jpeg,jpg,png,gif|max:2048'
@@ -38,8 +38,8 @@ class ProfileUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'firstname.required' => 'First Name is required',
-            'lastname.required' => "Last Name is requried",
+            'name.required' => 'First Name is required',
+            // 'lastname.required' => "Last Name is requried",
             'email.required' => "Email is required",
             'email.email' => "Email must be an valid email",
             'dob.required' => "Date of birth is required",

@@ -20,7 +20,7 @@ class CandidateResource extends JsonResource
         return [
             'id' => $this->id,
             'candidate_id' => $this->candidate_id,
-            'name' => $this->firstname,
+            'name' => $this->name,
             'code' => $this->pivot->code ?? "",
 
             'contact' => $this->phone,

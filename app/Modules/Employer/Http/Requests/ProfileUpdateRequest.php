@@ -26,7 +26,7 @@ class ProfileUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'firstname' => 'required',
+            // 'name' => 'required',
             // 'lastname' => 'required',
             'email' => 'required|email',
             // 'dob' => 'required',
@@ -38,7 +38,7 @@ class ProfileUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'firstname.required' => 'Firstname is required',
+            'name.required' => 'name is required',
             'lastname.required' => "lastname is requried",
             'email.required' => "Email is required",
             'email.email' => "Email must be an valid email",

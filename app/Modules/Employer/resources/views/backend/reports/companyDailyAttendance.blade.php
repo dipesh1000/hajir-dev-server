@@ -114,7 +114,7 @@
                                                         <div class="progress-order-header">
                                                             <div class="row">
                                                                 <div class="col-md-8 col-sm-8 col-12">
-                                                                    <h6>{{ (isset($companyCandidate->candidate) && $companyCandidate->candidate != null) ? $companyCandidate->candidate->firstname : '' }}</h6>
+                                                                    <h6>{{ (isset($companyCandidate->candidate) && $companyCandidate->candidate != null) ? $companyCandidate->candidate->name : '' }}</h6>
                                                                     <div class="d-flex justify-content-between">
                                                                         <span>
                                                                             @if (isset($companyCandidate->companyCandidateAttendaces))
@@ -162,7 +162,7 @@
                                                             <div class="progress-order-header">
                                                                 <div class="row">
                                                                     <div class="col-md-8 col-sm-8 col-12">
-                                                                        <h6>{{ isset($companyCandidate->candidate) ? $companyCandidate->candidate->firstname : '' }}
+                                                                        <h6>{{ isset($companyCandidate->candidate) ? $companyCandidate->candidate->name : '' }}
                                                                         </h6>
                                                                         <div class="d-flex justify-content-between">
                                                                             <span>
@@ -210,7 +210,7 @@
                                                         <div class="progress-order-header">
                                                             <div class="row">
                                                                 <div class="col-md-8 col-sm-8 col-12">
-                                                                    <h6>{{ $companyCandidate->candidate->firstname }}
+                                                                    <h6>{{ $companyCandidate->candidate->name }}
                                                                     </h6>
                                                                     <div class="d-flex justify-content-between">
                                                                         <span>

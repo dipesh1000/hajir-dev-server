@@ -19,7 +19,7 @@ class CompanyCandidateResource extends JsonResource
             'id' => $this->id,
             'company_id' => $this->company_id,
             'candidate_id' => $this->candidate_id,
-            'name' => $this->firstname .' '. $this->lastname,
+            'name' => $this->name,
             'phone' => $this->candidate->phone,
             'email' => $this->candidate->email,
             'code' => $this->code,

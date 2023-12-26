@@ -20,7 +20,7 @@ class CompanyCandidateResource extends JsonResource
             'id' => $this->id,
             'company_id' => $this->company_id,
             'candidate_id' => $this->candidate_id,
-            'name' => $this->candidate->firstname,
+            'name' => $this->candidate->name,
             'attendance' =>  $this->checkAttendanceToday($this),
             'break' => $this->checkAttendanceBreak($this),
             'attendanceTime' =>$this->checkAttendanceTime($this),

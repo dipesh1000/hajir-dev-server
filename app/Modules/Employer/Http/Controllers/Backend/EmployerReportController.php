@@ -560,7 +560,7 @@ class EmployerReportController extends Controller
                 foreach ($paymentReport as $payedcandidate) {
                     $newpaidCandidate[] = [
                         'id' => $payedcandidate->candidate->id,
-                        'name' => $payedcandidate->candidate->firstname ?? $payedcandidate->candidate->phone,
+                        'name' => $payedcandidate->candidate->name ?? $payedcandidate->candidate->phone,
                         'status' => 'paid',
                         'amount' => $payedcandidate->paid_amount
                     ];
@@ -569,7 +569,7 @@ class EmployerReportController extends Controller
                 foreach ($unpaidcompanycandidate as $unpaidCandidate) {
                     $newUnpaidCandidate[] = [
                         'id' => $unpaidCandidate->candidate->id,
-                        'name' => $unpaidCandidate->candidate->firstname ?? $unpaidCandidate->candidate->phone ?? null,
+                        'name' => $unpaidCandidate->candidate->name ?? $unpaidCandidate->candidate->phone ?? null,
                         'status' => "unpaid",
                         'amount' => $unpaidCandidate->salary_amount ?? null
                     ];
@@ -594,7 +594,7 @@ class EmployerReportController extends Controller
                 foreach ($unpaidcompanycandidate as $unpaidCandidate) {
                     $paidUnpaidCandidates[] = [
                         'id' => $unpaidCandidate->candidate->id,
-                        'name' => $unpaidCandidate->candidate->firstname ?? $unpaidCandidate->candidate->phone ?? null,
+                        'name' => $unpaidCandidate->candidate->name ?? $unpaidCandidate->candidate->phone ?? null,
                         'status' => "unpaid",
                         'amount' => $unpaidCandidate->salary_amount ?? null
                     ];

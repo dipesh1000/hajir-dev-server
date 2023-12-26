@@ -124,7 +124,7 @@
                 <hr>
                 <div class="d-flex justify-content-between">
                     <div class="">
-                        <h6>{{$candidate->candidate->firstname}}<span>&nbsp;[&nbsp;{{ $candidate->code}}&nbsp;]</span></h6>
+                        <h6>{{$candidate->candidate->name}}<span>&nbsp;[&nbsp;{{ $candidate->code}}&nbsp;]</span></h6>
                     </div>
                 </div>
                 <hr class="m-0">
@@ -270,7 +270,7 @@
                                                         <div class="progress-order-header">
                                                             <div class="row">
                                                                 <div class="col-md-8 col-sm-8 col-12">
-                                                                    <h6>{{ $companyCandidate->candidate->firstname }}</h6>
+                                                                    <h6>{{ $companyCandidate->candidate->name }}</h6>
                                                                     <div class="d-flex justify-content-between">
                                                                         <span>
                                                                             {{ isset($companyCandidate->companyCandidateAttendaces) ? $companyCandidate->companyCandidateAttendaces->start_time : '' }}
@@ -315,7 +315,7 @@
                                                             <div class="progress-order-header">
                                                                 <div class="row">
                                                                     <div class="col-md-8 col-sm-8 col-12">
-                                                                        <h6>{{ $companyCandidate->candidate->firstname }}
+                                                                        <h6>{{ $companyCandidate->candidate->name }}
                                                                         </h6>
                                                                         <div class="d-flex justify-content-between">
                                                                             <span>
@@ -363,7 +363,7 @@
                                                         <div class="progress-order-header">
                                                             <div class="row">
                                                                 <div class="col-md-8 col-sm-8 col-12">
-                                                                    <h6>{{ $companyCandidate->candidate->firstname }}
+                                                                    <h6>{{ $companyCandidate->candidate->name }}
                                                                     </h6>
                                                                     <div class="d-flex justify-content-between">
                                                                         <span>

@@ -2,24 +2,15 @@
 <div class="row">
     <div class="col-md-3">
         <div class="form-group">
-            <label for="firstname">First Name <span class="text-danger"> *</span></label>
-            <input type="text" class="form-control" id="firstname" placeholder="First Name..." name="firstname"
-                value="{{ $companyCandidate->candidate->firstname ?? old('name') }}" required>
-            @error('firstname')
+            <label for="name">Full Name <span class="text-danger"> *</span></label>
+            <input type="text" class="form-control" id="name" placeholder="First Name..." name="name"
+                value="{{ $companyCandidate->candidate->name ?? old('name') }}" required>
+            @error('name')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label for="lastname">Last Name <span class="text-danger"> *</span></label>
-            <input type="text" class="form-control" id="lastname" placeholder="Last Name..." name="lastname"
-                value="{{ $companyCandidate->candidate->lastname ?? old('lastname') }}" required>
-            @error('lastname')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-    </div>
+   
     <div class="col-md-3">
         <div class="form-group">
             <label for="designation">Designation<span class="text-danger"> *</span></label>

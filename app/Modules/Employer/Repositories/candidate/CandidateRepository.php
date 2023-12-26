@@ -33,10 +33,11 @@ class CandidateRepository implements CandidateInterface
 
     public function store($request, $company_id)
     {
+        dd('aksdhj');
         $user = User::where('phone', $request->contact)->candidateCheck()->first();
         if (!$user) {
             $user = new User();
-            // $user->firstname = $request->name;
+            // $user->name = $request->name;
             // $user->lastname = $request->lastname;
             $user->email = $request->email;
             $user->phone = $request->contact;
@@ -63,7 +64,7 @@ class CandidateRepository implements CandidateInterface
 
         $name_parts = explode(" ", $request->name, 2);
 
-        $companycandidate->firstname = $name_parts[0];
+        $companycandidate->name = $name_parts[0];
 
         // Check if there is a last name
         if (isset($name_parts[1])) {
@@ -102,7 +103,7 @@ class CandidateRepository implements CandidateInterface
         if ($company) {
             $user = User::where('id', $candidate_id)->first();
             if ($user) {
-                // $user->firstname = $request->name;
+                // $user->name = $request->name;
                 // $user->lastname = $request->lastname;
                 $user->email = $request->email;
                 $user->phone = $request->contact;
@@ -124,7 +125,7 @@ class CandidateRepository implements CandidateInterface
 
                 $name_parts = explode(" ", $request->name, 2);
 
-                $companycandidate->firstname = $name_parts[0];
+                $companycandidate->name = $name_parts[0];
 
                 // Check if there is a last name
                 if (isset($name_parts[1])) {

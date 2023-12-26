@@ -35,8 +35,8 @@ class CompanyCandidate extends Model
         'casual_leave',
         'working_hours',
         'is_approver',
-        'lastname',
-        'firstname'
+        // 'lastname',
+        'name'
 
     ];
 

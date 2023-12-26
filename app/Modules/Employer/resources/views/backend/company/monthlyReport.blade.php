@@ -74,7 +74,7 @@
                                     @foreach ($payments as $payment)
                                     
                                         <tr>
-                                            <td>{{ $payment->candidate->firstname }}</td>
+                                            <td>{{ $payment->candidate->name }}</td>
                                             <td class="text-center">{{ $payment->status}}</td>
                                             <td class="text-center">{{ $payment->paid_amount }}</td>
                                         </tr>

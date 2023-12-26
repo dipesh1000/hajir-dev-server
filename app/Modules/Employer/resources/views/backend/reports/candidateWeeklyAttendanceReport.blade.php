@@ -62,7 +62,7 @@
                 <hr>
                 <div class="d-flex justify-content-between">
                     <div class="ml-3">
-                        <h6>{{$candidate->candidate->firstname}}<span>&nbsp;[&nbsp;{{ $candidate->code}}&nbsp;]</span></h6>
+                        <h6>{{$candidate->candidate->name}}<span>&nbsp;[&nbsp;{{ $candidate->code}}&nbsp;]</span></h6>
                     </div>
                 </div>
                 {{-- <hr class="m-0"> --}}

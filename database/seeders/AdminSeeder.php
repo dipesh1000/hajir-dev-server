@@ -17,7 +17,7 @@ class AdminSeeder extends Seeder
     {
         $admins = [
             [
-                'firstname' => 'admin',
+                'name' => 'admin',
                 'lastname' => 'admin',
                 'email' => 'admin@gmail.com',
                 'email_verified_at'  => Carbon::now(),

@@ -124,7 +124,7 @@
                 <hr>
                 <div class="d-flex justify-content-between">
                     <div class="">
-                        <h6>{{$companycandidate->candidate->firstname}}<span>[ {{$companycandidate->code ?? ''}}]</span></h6>
+                        <h6>{{$companycandidate->candidate->name}}<span>[ {{$companycandidate->code ?? ''}}]</span></h6>
                     </div>
                 </div>
                 <hr class="m-0">

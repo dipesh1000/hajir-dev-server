@@ -73,8 +73,14 @@ class ApiInvitationController extends Controller
             $invitation->company_id = $company_id;
 
             if ($invitation->save() == true) {
+                CompanyCandidate::updateOrCreate([
+                    'company_id' => $company_id,
+                    'candidate_id' => $request->candidate_id
+                ], [
+                    'invitation_id' => $invitation->id
+                ]);
                 
-                 $canidate = User::where('id', $request->candidate_id)->first();
+                $canidate = User::where('id', $request->candidate_id)->first();
                 if ($canidate) {
                     $company = Company::where('id', $company_id)->first();
                     $data = [
@@ -85,13 +91,6 @@ class ApiInvitationController extends Controller
                     ];
                     $canidate->notify(new FirebaseNotification($data));
                 }
-                
-                CompanyCandidate::updateOrCreate([
-                    'company_id' => $company_id,
-                    'candidate_id' => $request->candidate_id
-                ], [
-                    'invitation_id' => $invitation->id
-                ]);
                 return $this->response->responseSuccessMsg("Successfully Saved", 200);
             }
             return $this->response->responseError("Something Went Wrong While Saving. Please Try Again.",400);

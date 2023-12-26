@@ -23,7 +23,10 @@ class FirebaseNotification extends Notification
     {
         $url = 'https://fcm.googleapis.com/fcm/send';
         $FcmToken = $notifiable->device_token;
-        $serverKey = 'AAAAVWtqYtY:APA91bGY_1xbTjOAWzjJgWYrFKTT5tGil6PSd43uvenm1_D39lYrJQ5Nvw66INpcW0nJ-duebfRKZQe7I-3CZ3DkPlWiY-0ISG-XGkBQT5doN5QfKnUrLg45O6CaP5mJFE-BnQ7v9yHh'; // Replace with your FCM server key
+        // Replace with your FCM server key
+        // $serverKey = 'AAAAVWtqYtY:APA91bGY_1xbTjOAWzjJgWYrFKTT5tGil6PSd43uvenm1_D39lYrJQ5Nvw66INpcW0nJ-duebfRKZQe7I-3CZ3DkPlWiY-0ISG-XGkBQT5doN5QfKnUrLg45O6CaP5mJFE-BnQ7v9yHh'; 
+
+        $serverKey = 'AAAA_fobcNs:APA91bE7hDFXaVC-i9OTAG7CyTAhfx6Pnj7G45HRtA9mYLZCA7a6no_upstla3ElhSxQ62SnEi34Bacllt5cfWBDYHmrLiiHULf76as6d2P1Kr_yjvHch0EbqnXkhO2-csTvU54DYOp0';
 
         $data = [
             "to" => $FcmToken,

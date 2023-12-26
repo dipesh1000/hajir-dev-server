@@ -23,7 +23,7 @@ class EmployerCandidateLeaveResource extends JsonResource
             'status' => $this->status,
             'end_date' => $this->end_date->format('d M y'),
             'created_at' => $this->created_at,
-            'name' => $this->candidate->firstname??'',
+            'name' => $this->candidate->name??'',
             'attachment' =>  getOrginalUrl($this->document_id) ?? ''
         ];
     }

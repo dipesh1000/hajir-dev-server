@@ -94,7 +94,7 @@ class ApiCandidateAuthController extends Controller
         try {
             $user = User::where('id', auth()->user()->id)->candidateCheck()->first();
             if ($user) {
-                $user->firstname = $request->firstname;
+                $user->name = $request->name;
                 // $user->lastname = $request->lastname;
                 $user->email = $request->email;
                 $user->dob = $request->dob;

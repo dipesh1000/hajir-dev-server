@@ -22,8 +22,7 @@ class CreateCompanyCandidatesTable extends Migration
             $table->enum('status', ['Active', 'Inactive'])->defaul('Inactive');
             $table->time('office_hour_start')->nullable();
             $table->string('code')->unique()->nullable();
-            $table->string('firstname')->nullable();
-            $table->string('lastname')->nullable();
+            $table->string('name')->nullable();
             $table->string('designation')->nullable();
 
             $table->date('joining_date')->nullable();
@@ -42,7 +41,7 @@ class CreateCompanyCandidatesTable extends Migration
             $table->unsignedDouble('overtime',2,2)->nullable();
 
             $table->unsignedDouble('allowance_amount')->nullable();
-            $table->enum('allowance_type', ['monthly', 'weekly', 'daily', 'yearly']);
+            $table->enum('allowance_type', ['monthly', 'weekly', 'daily', 'yearly'])->nullable();
 
 
             $table->unsignedInteger('casual_leave')->nullable();

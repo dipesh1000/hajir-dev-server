@@ -74,9 +74,9 @@
                 },
                 {
                     width:'18%',
-                    data: 'candidate.firstname',
+                    data: 'candidate.name',
                     render: function(data, type, row) {
-                        return '<p class="text-capitalize">'+row.candidate.firstname+' '+row.candidate.lastname ??''+'</p>';
+                        return '<p class="text-capitalize">'+row.candidate.name+' '+row.candidate.lastname ??''+'</p>';
                     }
                 },
                 {

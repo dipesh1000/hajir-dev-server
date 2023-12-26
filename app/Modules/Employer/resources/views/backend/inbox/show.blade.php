@@ -39,7 +39,7 @@
                 </div>
                 <hr class="mb-0">
                 <div class="col-xl-12 col-md-12 col-sm-12 mt-2">
-                    <h5 class="font-weight-bolder">{{ $leave->candidate->firstname . ' ' . $leave->candidate->lastname }}</h5>
+                    <h5 class="font-weight-bolder">{{ $leave->candidate->name . ' ' . $leave->candidate->lastname }}</h5>
                     <p>{{ $leave->created_at->format('Y-m-d') }}</p>
                 </div>
 

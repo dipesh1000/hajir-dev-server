@@ -27,7 +27,7 @@
             <div class="col-xl-12 col-lg-12 col-sm-12">
                 <div class="widget-content widget-content-area br-6">
                     <div class="col-12">
-                        <h5 style="display: inline;">Details of {{$candidate->candidate->firstname ?? ''}}</h5>
+                        <h5 style="display: inline;">Details of {{$candidate->candidate->name ?? ''}}</h5>
                         <a class="btn btn-secondary float-right " href="{{ route('employer.company.viewEmployees',$candidate->company->slug) }}">Previous Page</a>
                     </div>
                     <hr>
@@ -38,7 +38,7 @@
                                 <div class="form-group data-items">
                                     <label for="name"> Name </label>
                                    
-                                    <h6 style="font-weight:600;"> {{$candidate->candidate->firstname ?? ''}}</h6>
+                                    <h6 style="font-weight:600;"> {{$candidate->candidate->name ?? ''}}</h6>
                                 </div>
                             </div> 
                             <div class="col-md-3">

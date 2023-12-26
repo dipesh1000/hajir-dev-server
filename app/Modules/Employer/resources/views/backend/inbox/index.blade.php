@@ -60,7 +60,7 @@
                                         <img src="{{asset('backendfiles/assets/img/90x90.jpg')}}" width="90px" height="90px" alt="PP">
                                         </div>
                                         <div class="leaveText">
-                                            <h6>{{ ($leave->candidate->firstname?? '').' '.($leave->candidate->lastname ?? '')}}</h6>
+                                            <h6>{{ ($leave->candidate->name?? '').' '.($leave->candidate->lastname ?? '')}}</h6>
                                             <div class="d-flex justify-content-between">
                                                 <p>Sick Leave</p>
                                                 <p>{{ $leave->created_at->format('d M, Y')}}</p>
@@ -83,7 +83,7 @@
                                 <img src="{{asset('backendfiles/assets/img/90x90.jpg')}}" width="90px" height="90px" alt="PP">
                                 </div>
                                 <div class="leaveText">
-                                    <h6>{{ $leave->candidate->firstname ?? ''}}</h6>
+                                    <h6>{{ $leave->candidate->name ?? ''}}</h6>
                                     <div class="d-flex justify-content-between">
                                         <p>Sick Leave</p>
                                         <p>{{ 'asdasd'}}</p>
