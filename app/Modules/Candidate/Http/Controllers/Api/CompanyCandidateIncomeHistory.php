@@ -55,9 +55,9 @@ class CompanyCandidateIncomeHistory extends Controller
                         $WeekDayNumber = $day->format('w') + 1;
 
                         $checkAttendance = checkIncomeHistoryAttendance($day, $attendances);
-                        $checkBusinessLeave = checkIncomeHistoryBusinessLeave($WeekDayNumber, $companyBusinessLeave, $companyid, $candidateid);
-                        $checkSpecialHoliday = checkIncomeHistorySpecialHoliday($day->format('Y-m-d'), $companySpecialLeave, $companyid, $candidateid);
-                        $checkGovermentHoliday = checkIncomeHistoryGovermentHoliday($day->format('Y-m-d'), $companyGovermentLeave, $companyid, $candidateid);
+                        $checkBusinessLeave = checkIncomeHistoryBusinessLeave($WeekDayNumber, $companyid, $candidateid, $companyBusinessLeave);
+                        $checkSpecialHoliday = checkIncomeHistorySpecialHoliday($day->format('Y-m-d'), $companyid, $candidateid, $companySpecialLeave);
+                        $checkGovermentHoliday = checkIncomeHistoryGovermentHoliday($day->format('Y-m-d'), $companyid, $candidateid, $companyGovermentLeave);
 
                         if ($checkAttendance) {
                             $daily_earning +=  $checkAttendance['earning'] ?? 0;
@@ -145,9 +145,9 @@ class CompanyCandidateIncomeHistory extends Controller
                         $WeekDayNumber = $day->format('w') + 1;
 
                         $checkAttendance = checkIncomeHistoryAttendance($day, $attendances);
-                        $checkBusinessLeave = checkIncomeHistoryBusinessLeave($WeekDayNumber, $companyBusinessLeave, $companyid, $candidateid);
-                        $checkSpecialHoliday = checkIncomeHistorySpecialHoliday($day->format('Y-m-d'), $companySpecialLeave, $companyid, $candidateid);
-                        $checkGovermentHoliday = checkIncomeHistoryGovermentHoliday($day->format('Y-m-d'), $companyGovermentLeave, $companyid, $candidateid);
+                        $checkBusinessLeave = checkIncomeHistoryBusinessLeave($WeekDayNumber, $companyid, $candidateid, $companyBusinessLeave);
+                        $checkSpecialHoliday = checkIncomeHistorySpecialHoliday($day->format('Y-m-d'), $companyid, $candidateid, $companySpecialLeave);
+                        $checkGovermentHoliday = checkIncomeHistoryGovermentHoliday($day->format('Y-m-d'), $companyid, $candidateid, $companyGovermentLeave);
 
                         if ($checkAttendance) {
                             $daily_earning +=  $checkAttendance['earning'] ?? 0;

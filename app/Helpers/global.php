@@ -393,7 +393,7 @@ function checkIncomeHistoryAttendance($include, $attendances)
 
 
 
-function checkIncomeHistoryBusinessLeave($include, $array = array(), $companyid, $candidateid)
+function checkIncomeHistoryBusinessLeave($include,  $companyid, $candidateid, $array = array())
 {
     if (in_array($include, $array)) {
         return [
@@ -403,7 +403,7 @@ function checkIncomeHistoryBusinessLeave($include, $array = array(), $companyid,
     }
     return null;
 }
-function checkIncomeHistorySpecialHoliday($include, $array = array(), $companyid, $candidateid)
+function checkIncomeHistorySpecialHoliday($include, $companyid, $candidateid, $array = array())
 {
     if (in_array($include, $array)) {
         return [
@@ -413,7 +413,7 @@ function checkIncomeHistorySpecialHoliday($include, $array = array(), $companyid
     }
     return null;
 }
-function checkIncomeHistoryGovermentHoliday($include, $array = array(), $companyid, $candidateid)
+function checkIncomeHistoryGovermentHoliday($include, $companyid, $candidateid, $array = array())
 {
     if (in_array($include, $array)) {
         return [
