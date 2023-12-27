@@ -44,40 +44,39 @@ class ApiEmployerReportController extends Controller
                 $companyCandidates =  CompanyCandidateDailyAttendanceReport::collection($companyCandidates);
             }
             $absentCount = CompanyCandidate::where('company_id', $id)
-                ->active()->verified()
-                ->with(
-                    'candidate',
-                    function ($q) {
-                        $q->whereDoesntHave('todayattendances');
-                    }
-                )->count();
+                            ->active()->verified()
+                            ->whereHas('candidate',function ($q) {
+                                    $q->whereDoesntHave('todayattendances');
+                                }
+                            )->count();
 
             $presentCount = CompanyCandidate::where('company_id', $id)
-                ->active()->verified()
-                ->whereHas(
-                    'candidate',
-                    function ($q) {
-                        $q->whereHas('attendances', function ($q) {
-                            $q->whereDate('created_at', today())
-                                ->where('employee_status', 'Present');
-                        });
-                    }
-                )->count();
+                    ->active()->verified()
+                    ->whereHas(
+                        'candidate',
+                        function ($q) {
+                            $q->whereHas('attendances', function ($q) {
+                                $q->whereDate('created_at', today())
+                                    ->where('employee_status', 'Present');
+                            });
+                        }
+                    )->count();
 
             $lateCount = CompanyCandidate::where('company_id', $id)
-                ->active()->verified()
-                ->whereHas(
-                    'candidate',
-                    function ($q) {
-                        $q->whereHas('attendances', function ($q) {
-                            $q->whereDate('created_at', today())
-                                ->where('employee_status', 'Late');
-                        });
-                    }
-                )->count();
+                    ->active()->verified()
+                    ->whereHas(
+                        'candidate',
+                        function ($q) {
+                            $q->whereHas('attendances', function ($q) {
+                                $q->whereDate('created_at', today())
+                                    ->where('employee_status', 'Late');
+                            });
+                        }
+                    )->count();
 
             $totalattendee = CompanyCandidate::where('company_id', $id)
-                ->verified()->count();
+                        ->verified()->count();
+               
             $data = [
                 'total_attendee' =>  $totalattendee ?? 0,
                 'present' => $presentCount ?? 0,
@@ -239,6 +238,8 @@ class ApiEmployerReportController extends Controller
 
                     $status = 'absent';
                 }
+
+                
 
                 $data = [
                     'weekly_datas' => $reportData,
@@ -418,12 +419,12 @@ class ApiEmployerReportController extends Controller
             $date = $month;
             $totaldays = Carbon::parse($date)->daysInMonth;
             $monthStart = Carbon::parse($date)
-                ->firstOfMonth();
+                            ->firstOfMonth();
             $monthEnd = Carbon::parse($date)
-                ->endOfMonth();
+                            ->endOfMonth();
             $candidate = CompanyCandidate::where('candidate_id', $candidate_id)->first();
             $attendances = Attendance::where('candidate_id', $candidate_id)->where('company_id', $companyid)
-                ->whereBetween('created_at', [$monthStart, $monthEnd]);
+                            ->whereBetween('created_at', [$monthStart, $monthEnd]);
 
             $totalearning = $attendances->sum('earning');
             $attendances = $attendances->get();
@@ -813,39 +814,84 @@ class ApiEmployerReportController extends Controller
     public function yearlyReport($companyid, $candidate_id, $year = null)
     {
         try {
-
+            $data = '';
             if (!$year) {
                 $year = date('Y');
             }
+    
+            $currentMonth = date('n');
+            $allmonths = [];
 
-            $allmonths = [
-                "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Nov", "Dec"
-            ];
+            for ($i = 1; $i <= $currentMonth; $i++) {
+                $monthName = date('M', mktime(0, 0, 0, $i, 1));
+                $allmonths[] = $monthName;
+            }
 
             $companycandidate = CompanyCandidate::where('company_id', $companyid)
-                ->where('candidate_id', $candidate_id)->where('verified_status', 'verified')
-                ->where('status', 'Active')->first();
+                                ->where('candidate_id', $candidate_id)->where('verified_status', 'verified')
+                                ->where('status', 'Active')->first();
 
             if ($companycandidate) {
                 $payments = Payment::where('company_id', $companyid)
-                    ->where('candidate_id', $candidate_id)->whereYear('payment_for_month', $year)->get();
+                                ->where('candidate_id', $candidate_id)
+                                ->whereYear('payment_for_month', $year)
+                                ->get();
 
 
                 $attendances = Attendance::where('company_id', $companyid)
-                    ->where('candidate_id', $candidate_id)->whereYear('created_at', $year)->get();
+                                ->where('candidate_id', $candidate_id)
+                                ->whereYear('created_at', $year)
+                                ->get();
+
+
+
                 $monthData = [];
                 foreach ($allmonths as $month) {
-                    $monthData[$month] = $payments->where('payment_for_month', $month)->first();
+
+                     // Get payments for the current month
+                    $paymentsForMonth = $payments->filter(function ($payment) use ($month) {
+                        return date('M', strtotime($payment->payment_for_month)) === $month;
+                    });
+
+                    // Get attendances for the current month
+                    $attendancesForMonth = $attendances->filter(function ($attendance) use ($month) {
+                        return date('M', strtotime($attendance->created_at)) === $month;
+                    });
+
+                   
+
+                        // Initialize status and amount for the current month
+                        $status = "Unpaid";
+                        $amount = 0.00 .'/';
+                        // If there are payments for the current month, update status
+                        if ($paymentsForMonth->count() > 0) {
+                            $status = $paymentsForMonth->status;
+                        }
+
+                        // If there are attendances for the current month, compute the amount
+                        if ($attendancesForMonth->count() > 0) {
+                            $totalAmount = $attendancesForMonth->sum('earning'); // Adjust based on your actual field name if it's different.
+                            $amount = $totalAmount . " /";
+                        }
+
+                        $monthData[] = [
+                            'month' => $month,
+                            'status' => $status,
+                            'amount' => $amount
+                        ];
+
+                        $data = $monthData;
+
+                    // }else{
+                    //     $data = "No Data Avaliable";
+                    // }
                 }
+                // $data = [
+                //     'datas' => YearlyEarningResource::collection($datas),
+                //     'total' => 50000
+                // ];
 
-                $datas = ["jan"];
-
-
-                $data = [
-                    'datas' => YearlyEarningResource::collection($datas),
-                    'total' => 50000
-                ];
-                return $this->response->responseSuccess($data, "Success", 200);
+                return $this->response->responseSuccess($monthData, "Success", 200);
             }
             return $this->response->responseError("Candidate dees not exists");
         } catch (\Exception $e) {

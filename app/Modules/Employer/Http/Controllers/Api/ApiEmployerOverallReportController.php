@@ -20,10 +20,9 @@ class ApiEmployerOverallReportController extends Controller
         try {
             $totalattendee = CompanyCandidate::where('company_id', $id)->count();
             $absentCount = CompanyCandidate::where('company_id', $id)
-                        ->with(['candidate' => function ($q) {
-                                $q->whereDoesntHave('attendances');
-                            }
-                        ])->count();
+                            ->whereHas('candidate', function ($q) {
+                                    $q->whereDoesntHave('todayattendances');
+                                })->count();
 
             $presentCount = CompanyCandidate::where('company_id', $id)
                         ->whereHas('candidate', function ($q) {
@@ -60,6 +59,8 @@ class ApiEmployerOverallReportController extends Controller
 
             $totalPresentToday = $presentCount ?? 0 +  $lateCount ?? 0;
             $presentPercentage = ($totalPresentToday*100)/$totalattendee;
+
+            // dd($totalattendee,$presentCount,$absentCount,$lateCount);
             $data = [
                 'total_attendee' =>   $totalattendee ?? 0,
                 'present' => $presentCount ?? 0,
@@ -81,36 +82,33 @@ class ApiEmployerOverallReportController extends Controller
         try {
             $totalattendee = CompanyCandidate::where('company_id', $id)->count();
             $absentCount = CompanyCandidate::where('company_id', $id)
-                            ->with([ 'candidate' => function ($q) {
+                            ->whereHas('candidate',function ($q) {
                                     $q->whereDoesntHave('weeklyattendances');
-                                }
-                            ])->count();
+                                })->count();
+
             $presentCount = CompanyCandidate::where('company_id', $id)
                             ->whereHas( 'candidate',function ($q) {
-                                    $q->whereHas('attendances', function ($q) {
-                                        $q->whereDate('created_at', today())
-                                            ->where('employee_status', 'Present');
-                                    });
-                                }
-                            )->count();
+                                $q->whereHas('attendances', function ($q) {
+                                    $q->whereDate('created_at', today())
+                                        ->where('employee_status', 'Present');
+                                });
+                            })->count();
 
             $lateCount = CompanyCandidate::where('company_id', $id)
                         ->whereHas('candidate', function ($q) {
-                                $q->whereHas('attendances', function ($q) {
-                                    $q->whereDate('created_at', today())
-                                        ->where('employee_status', 'Late');
-                                });
-                            }
-                        )->count();
+                            $q->whereHas('attendances', function ($q) {
+                                $q->whereDate('created_at', today())
+                                    ->where('employee_status', 'Late');
+                            });
+                        })->count();
 
             $LeaveCount = CompanyCandidate::where('company_id', $id)
                             ->whereHas('candidate',function ($q) {
-                                    $q->whereHas('attendances', function ($q) {
-                                        $q->whereDate('created_at', today())
-                                            ->where('employee_status', 'Leave');
-                                    });
-                                }
-                            )->count();
+                                $q->whereHas('attendances', function ($q) {
+                                    $q->whereDate('created_at', today())
+                                        ->where('employee_status', 'Leave');
+                                });
+                            })->count();
 
             $punchOutCount = CompanyCandidate::where('company_id', $id)
                             ->whereHas('candidate',function ($q) {
@@ -118,8 +116,8 @@ class ApiEmployerOverallReportController extends Controller
                                         $q->whereDate('created_at', today())
                                             ->where('employee_status', 'punchOut');
                                     });
-                                }
-                            )->count();
+                                })->count();
+                                
             $totalPresentToday = $presentCount ?? 0 +  $lateCount ?? 0;
             $presentPercentage = ($totalPresentToday*100)/$totalattendee;
 
@@ -145,18 +143,17 @@ class ApiEmployerOverallReportController extends Controller
         try {
             $totalattendee = CompanyCandidate::where('company_id', $id)->count();
             $absentCount = CompanyCandidate::where('company_id', $id)
-                                ->with(['candidate' => function ($q) {
+                                ->whereHas('candidate',function ($q) {
                                     $q->whereDoesntHave('monthlyattendances');
-                                }
-                            ])->count();
+                                })->count();
+
             $presentCount = CompanyCandidate::where('company_id', $id)
                             ->whereHas('candidate',function ($q) {
                                     $q->whereHas('attendances', function ($q) {
                                         $q->whereMonth('created_at', today()->format('m'))
                                             ->where('employee_status', 'Present');
                                     });
-                                }
-                            )->count();
+                                })->count();
 
             $lateCount = CompanyCandidate::where('company_id', $id)
                         ->whereHas('candidate',function ($q) {
@@ -164,8 +161,7 @@ class ApiEmployerOverallReportController extends Controller
                                     $q->whereMonth('created_at', today()->format('m'))
                                         ->where('employee_status', 'Late');
                                 });
-                            }
-                        )->count();
+                            })->count();
 
             $LeaveCount = CompanyCandidate::where('company_id', $id)
                         ->whereHas('candidate',function ($q) {
@@ -173,8 +169,7 @@ class ApiEmployerOverallReportController extends Controller
                                     $q->whereMonth('created_at', today()->format('m'))
                                         ->where('employee_status', 'Leave');
                                 });
-                            }
-                        )->count();
+                            })->count();
 
             $punchOutCount = CompanyCandidate::where('company_id', $id)
                             ->whereHas('candidate',function ($q) {
@@ -182,8 +177,8 @@ class ApiEmployerOverallReportController extends Controller
                                         $q->whereMonth('created_at', today()->format('m'))
                                             ->where('employee_status', 'punchOut');
                                     });
-                                }
-                            )->count();
+                                })->count();
+
             $totalPresentToday = $presentCount ?? 0 +  $lateCount ?? 0;
             $presentPercentage = ($totalPresentToday*100)/$totalattendee;
 
@@ -208,56 +203,43 @@ class ApiEmployerOverallReportController extends Controller
     {
         try {
             $totalattendee = CompanyCandidate::where('company_id', $id)->count();
-            $absentCount = CompanyCandidate::where('company_id', $id)->with([
-                'candidate'
-                => function ($q) {
-                    $q->whereDoesntHave('yearlyattendances');
-                }
-            ])->count();
+            $absentCount = CompanyCandidate::where('company_id', $id)
+                            ->with('candidate', function ($q) {
+                                $q->whereDoesntHave('yearlyattendances');
+                            })->count();
 
             $presentCount = CompanyCandidate::where('company_id', $id)
-                ->whereHas(
-                    'candidate',
-                    function ($q) {
-                        $q->whereHas('attendances', function ($q) {
-                            $q->whereYear('created_at', date('Y'))
-                                ->where('employee_status', 'Present');
-                        });
-                    }
-                )->count();
+                            ->whereHas('candidate', function ($q) {
+                                $q->whereHas('attendances', function ($q) {
+                                    $q->whereYear('created_at', date('Y'))
+                                        ->where('employee_status', 'Present');
+                                });
+                            })->count();
 
             $lateCount = CompanyCandidate::where('company_id', $id)
-                ->whereHas(
-                    'candidate',
-                    function ($q) {
-                        $q->whereHas('attendances', function ($q) {
-                            $q->whereYear('created_at', date('Y'))
-                                ->where('employee_status', 'Late');
-                        });
-                    }
-                )->count();
+                        ->whereHas('candidate',function ($q) {
+                            $q->whereHas('attendances', function ($q) {
+                                $q->whereYear('created_at', date('Y'))
+                                    ->where('employee_status', 'Late');
+                            });
+                        })->count();
 
             $LeaveCount = CompanyCandidate::where('company_id', $id)
-                ->whereHas(
-                    'candidate',
-                    function ($q) {
-                        $q->whereHas('attendances', function ($q) {
-                            $q->whereYear('created_at', date('Y'))
-                                ->where('employee_status', 'Leave');
-                        });
-                    }
-                )->count();
+                            ->whereHas('candidate', function ($q) {
+                                $q->whereHas('attendances', function ($q) {
+                                    $q->whereYear('created_at', date('Y'))
+                                        ->where('employee_status', 'Leave');
+                                });
+                            })->count();
 
             $punchOutCount = CompanyCandidate::where('company_id', $id)
-                ->whereHas(
-                    'candidate',
-                    function ($q) {
-                        $q->whereHas('attendances', function ($q) {
-                            $q->whereYear('created_at', date('Y'))
-                                ->where('employee_status', 'punchOut');
-                        });
-                    }
-                )->count();
+                            ->whereHas('candidate', function ($q) {
+                                $q->whereHas('attendances', function ($q) {
+                                    $q->whereYear('created_at', date('Y'))
+                                        ->where('employee_status', 'punchOut');
+                                });
+                            })->count();
+
             $totalPresentToday = $presentCount ?? 0 +  $lateCount ?? 0;
             $presentPercentage = ($totalPresentToday*100)/$totalattendee;
 

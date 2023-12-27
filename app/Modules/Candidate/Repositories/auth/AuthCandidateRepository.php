@@ -80,7 +80,8 @@ class AuthCandidateRepository implements AuthCandidateInterface
                 $user->assignRole('candidate');
                 $user->otp()->updateOrCreate([
                     'user_id' => $user->id
-                ], [
+                ], 
+                [
                     'otp' => mt_rand(1000,9999)
                     // 'otp' => str_pad(rand(0, pow(10, 4)-1), 4, '0', STR_PAD_LEFT)
                 ]);
@@ -113,7 +114,8 @@ class AuthCandidateRepository implements AuthCandidateInterface
         $user = User::where('phone', $request->phone)->where('type', 'candidate')->first();
         if ($user) {
             $useropt = UserOtp::where('user_id', $user->id)
-                ->where('otp', $request->otp)->first();
+                        ->where('otp', $request->otp)
+                        ->first();
             if ($useropt) {
                 $user->password = bcrypt($request->phone);
                 $user->update();

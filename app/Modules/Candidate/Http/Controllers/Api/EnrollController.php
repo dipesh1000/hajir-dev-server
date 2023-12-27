@@ -40,10 +40,10 @@ class EnrollController extends Controller
             }
 
             $absentCount = CompanyCandidate::where('company_id', $id)
-                ->active()->verified()
-                ->whereHas('candidate', function ($q) {
-                    $q->whereDoesntHave('todayattendances');
-                })->count();
+                            ->active()->verified()
+                            ->whereHas('candidate', function ($q) {
+                                $q->whereDoesntHave('todayattendances');
+                            })->count();
 
             $presentCount = CompanyCandidate::where('company_id', $id)
                 ->active()->verified()
@@ -103,13 +103,13 @@ class EnrollController extends Controller
             }
 
             $absentCount = CompanyCandidate::where('company_id', $id)
-                ->active()->verified()
-                ->whereHas(
-                    'candidate',
-                    function ($q) {
-                        $q->whereDoesntHave('todayattendances');
-                    }
-                )->count();
+                            ->active()->verified()
+                            ->whereHas(
+                                'candidate',
+                                function ($q) {
+                                    $q->whereDoesntHave('todayattendances');
+                                }
+                            )->count();
 
             $presentCount = CompanyCandidate::where('company_id', $id)
                 ->active()->verified()

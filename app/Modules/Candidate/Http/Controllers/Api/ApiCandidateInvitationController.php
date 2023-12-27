@@ -26,12 +26,29 @@ class ApiCandidateInvitationController extends Controller
     {
         try {
             $user_id = Auth()->id();
+            // $invs = CompanyCandidate::where('candidate_id', $user_id)
+            //             ->whereHas('invitation')
+            //             ->with('invitation', function($q){
+            //                 $q->where('status', 'Not-Approved')
+            //                     ->with('company', 'employer')
+            //                     ->latest();
+            //             })
+            //             ->get();
+
+
+            // $invitations= collect();
+            // foreach($invs as $inv){
+            //     $invitations->push($inv->invitation);
+            // }
+           
             $invitations = Invitation::where('candidate_id', $user_id)
                             ->where('status', 'Not-Approved')
                             ->with('company', 'employer')
                             ->latest()
                             ->get();
+
             if ($invitations) {
+                // dd($invitations);
                 $candidateInvitations = CandidateInvitationResource::collection($invitations);
             }
 

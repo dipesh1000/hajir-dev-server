@@ -29,7 +29,6 @@ Route::group([
 
         Route::get('currentDayAttendanceDelete/{company_id}', 'ApiAttendanceCandidateController@currentDayAttendanceDelete');
 
-
         Route::post('attendance-store/{company_id}', 'ApiAttendanceCandidateController@attendanceStore');
 
         Route::post('attendance-update/{company_id?}/{attendance_id?}', 'ApiAttendanceCandidateController@attendanceUpdate');

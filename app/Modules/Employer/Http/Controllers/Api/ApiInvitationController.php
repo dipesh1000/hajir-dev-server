@@ -65,37 +65,42 @@ class ApiInvitationController extends Controller
     public function store(Request $request, $company_id)
     {
         try {
-            // dd($company_id);
-            $user_id = Auth()->id();
-            $invitation = new Invitation();
-            $invitation->employer_id = $user_id;
-            $invitation->candidate_id = $request->candidate_id;
-            $invitation->status = $request->status;
-            $invitation->company_id = $company_id;
+           
+            $canidate = User::where('id', $request->candidate_id)->first();
+            if($canidate){
+                $user_id = Auth()->id();
+                $invitation = Invitation::where('company_id',$company_id)
+                                    ->where('candidate_id',$request->candidate_id)
+                                    ->first();
+                if($invitation && $invitation->status != "Decline"){
+                    return $this->response->responseSuccessMsg("Invitation Already Sent.", 200);
+                }
+                $newinvitation = new Invitation();
+                $newinvitation->employer_id = $user_id;
+                $newinvitation->candidate_id = $request->candidate_id;
+                $newinvitation->status = $request->status;
+                $newinvitation->company_id = $company_id;
+                if ($newinvitation->save() == true) {
+                    CompanyCandidate::updateOrCreate([
+                        'company_id' => $company_id,
+                        'candidate_id' => $request->candidate_id
+                    ], [
+                        'invitation_id' => $newinvitation->id
+                    ]);
 
-            if ($invitation->save() == true) {
-                // dd($invitation);
-                CompanyCandidate::updateOrCreate([
-                    'company_id' => $company_id,
-                    'candidate_id' => $request->candidate_id
-                ], [
-                    'invitation_id' => $invitation->id
-                ]);
-                
-                $canidate = User::where('id', $request->candidate_id)->first();
-                if ($canidate) {
                     $company = Company::where('id', $company_id)->first();
                     $data = [
                         'type' => 'invitation',
-                        'type_id' => $invitation->id,
+                        'type_id' => $newinvitation->id,
                         'title' => 'New Invitation',
                         'body' => 'You have received an invitation from ' .$company->name,
                     ];
-                    // $canidate->notify(new FirebaseNotification($data));
+                                                
+                    return $this->response->responseSuccessMsg("Successfully Saved", 200);
                 }
-                return $this->response->responseSuccessMsg("Successfully Saved", 200);
+                return $this->response->responseError("Something Went Wrong While Saving. Please Try Again.",400);
             }
-            return $this->response->responseError("Something Went Wrong While Saving. Please Try Again.",400);
+            return $this->response->responseError("Candidate Not Found.",404);
         } catch (\Exception $e) {
             return $this->response->responseError($e->getMessage());
         }

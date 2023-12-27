@@ -161,6 +161,8 @@ class ApiAttendanceCandidateController extends Controller
     public function attendanceUpdate($companyid = null, $attendanceid = null, Request $request)
     {
         try {
+
+           
             if ($attendanceid != null) {
                 if ($companyid != null) {
                     $user = auth()->user();
@@ -178,6 +180,7 @@ class ApiAttendanceCandidateController extends Controller
                             ->first();
 
                         if ($attendance) {
+                           
                             $earnings = $this->overtime($companycandidate, $attendance);
                             $attendance->end_time = Carbon::now();
                             $attendance->earning = $earnings['earning'] ?? 0;
@@ -236,7 +239,7 @@ class ApiAttendanceCandidateController extends Controller
                 }
 
                
-                if($attendance && $attendance->end_time == null){
+                if($attendance){
                     $officeAssignMinutes = Carbon::parse($companycandidate->office_hour_end)
                                     ->diffInMinutes(Carbon::parse($companycandidate->office_hour_start));
                     if($officeAssignMinutes<=0){
@@ -244,13 +247,13 @@ class ApiAttendanceCandidateController extends Controller
                     }else{
                         $minuteSalary =  $dailySalary / $officeAssignMinutes;
                     }
-
-                   
                     $companycandidate->salary_in_minute = round($minuteSalary, 2);
                     $companycandidate->total_earning = round($totalEarning, 2);
                 }
               
                 $companycandidate->attendace = $attendance;
+
+                // dd($companycandidate);
                 
                 $deatils = new TodayDetailsResource($companycandidate);
                 $data = $deatils ?? [];
@@ -276,14 +279,21 @@ class ApiAttendanceCandidateController extends Controller
         $totalOverTimeInMinute = 0;
         $totalDecuctSlarayByMinute = 0;
 
-        if ($companycandidate->salary_amount != null && $companycandidate->salary_amount > $currentMonthDays) {
-            $start_time = $attendance->start_time;
-            $end_time = Carbon::now();
-            $officeAssignMinutes = Carbon::parse($companycandidate->office_hour_end)->diffInMinutes(Carbon::parse($companycandidate->office_hour_start));
-            $officeAttendInMinutes = $end_time->diffInMinutes($start_time);
+        // $officeAssignMinutes =0;
+        // $totalLateinMinute=0;
+       
+        
+        $start_time = $attendance->start_time;
+        $end_time = Carbon::now();
+        $officeAssignMinutes = Carbon::parse($companycandidate->office_hour_end)->diffInMinutes(Carbon::parse($companycandidate->office_hour_start));
+        $officeAttendInMinutes = $end_time->diffInMinutes($start_time);
 
-            $totalLateinMinute = $officeAssignMinutes  - $officeAttendInMinutes;
+        $totalLateinMinute = $officeAssignMinutes - $officeAttendInMinutes;
 
+
+        // dd($officeAssignMinutes,$dailySalary,$companycandidate, $attendance);
+        if ($companycandidate->salary_amount != null) {
+              
             if ($totalLateinMinute < 0) {
                 $totalOverTimeInMinute = abs($totalLateinMinute);
             }
@@ -298,8 +308,10 @@ class ApiAttendanceCandidateController extends Controller
             }
         }
 
+       
         $minuteSalary =  $dailySalary / $officeAssignMinutes;
 
+        // dd($minuteSalary);
         if ($totalLateinMinute > 0) {
             $totalDecuctSlarayByMinute = $minuteSalary * $totalLateinMinute;
         }
