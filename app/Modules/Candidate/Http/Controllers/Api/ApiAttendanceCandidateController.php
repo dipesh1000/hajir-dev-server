@@ -204,31 +204,23 @@ class ApiAttendanceCandidateController extends Controller
             // dd($user);
             $todayDate = Carbon::today();
             $attendance = Attendance::where('created_at', $todayDate)
-                ->where('candidate_id', $user->id)
-                    ->with('breaks','currentBreak')
-                ->where('company_id', $company_id)
-                ->first();
+                        ->where('candidate_id', $user->id)
+                        ->where('company_id', $company_id)
+                        ->with('breaks','currentBreak')
+                        ->first();
 
             $companycandidate = CompanyCandidate::where('company_id', $company_id)
-                ->where('candidate_id', $user->id)
-                ->where('verified_status', 'verified')
-                ->where('status', 'Active')
-                ->first();
-
-                
-
-                // $company = Company::where('id', $company_id)->with('govLeaves', 'specialLeaves', 'companyBusinessLeave', 'companyCandidateLeaves')->first();
-
-                // dd($company);
+                        ->where('candidate_id', $user->id)
+                        ->where('verified_status', 'verified')
+                        ->where('status', 'Active')
+                        ->first();
 
             if ($companycandidate) {
                 $totalEarning = Attendance::where('candidate_id', $user->id)
                             ->where('company_id', $companycandidate->company_id)
                             ->where('employee_status', '!=', 'Absent')
                             ->where('end_time', '!=', null)->where('start_time', '!=', null)
-                            ->sum('earning')??0;
-
-                           
+                            ->sum('earning');
 
                 $currentMonthDays = 30;
                 $currentMonthWeeks = 4;

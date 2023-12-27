@@ -34,7 +34,7 @@ class ApiEmployerReportController extends Controller
     public function currentDayReport($id)
     {
         try {
-            $companyCandidates = CompanyCandidate::where('company_id', $id)
+            $companyCandidates = CompanyCandidate::where('company_id', $id)->active()
                 ->verified()
                 ->with([
                     'candidate', 'companyCandidateAttendaces'
@@ -92,6 +92,34 @@ class ApiEmployerReportController extends Controller
         }
     }
 
+
+    public function allCompanyCandidates($id)
+    {
+        try {
+            $companyCandidates = CompanyCandidate::where('company_id', $id)
+                ->verified()
+                ->with([
+                    'candidate', 'activecompanyCandidateAttendaces'
+                ])
+                ->whereHas('activecompanyCandidateAttendaces', function ($q) {
+                    $q->whereIn('employee_status', ['Present', 'Late']);
+                })
+                ->get();
+
+            if ($companyCandidates && $companyCandidates) {
+                $candidates =  CompanyCandidateDailyAttendanceReport::collection($companyCandidates);
+            }
+            $data = [
+                'candidates' => $candidates ?? []
+            ];
+            return $this->response->responseSuccess($data, "Successfully Fetched", 200);
+        } catch (Exception  $e) {
+            return $this->response->responseError($e->getMessage());
+        }
+    }
+
+
+
     public function activeCompanyCandidates($id)
     {
         try {
@@ -122,7 +150,7 @@ class ApiEmployerReportController extends Controller
     {
         try {
             $companyCandidates = CompanyCandidate::where('company_id', $id)
-                ->active()->verified()
+                ->inactive()->verified()
                 ->with([
                     'candidate', 'activecompanyCandidateAttendaces'
                 ])

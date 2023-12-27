@@ -149,9 +149,12 @@ Route::group([
             //index
             Route::get('today/{companyid}', 'ApiEmployerReportController@currentDayReport');
 
+            Route::get('today/all-candidate/{companyid}', 'ApiEmployerReportController@allCompanyCandidates'); //New 
+            
             Route::get('today/active-candidate/{companyid}', 'ApiEmployerReportController@activeCompanyCandidates');
 
             Route::get('today/inactive-candidate/{companyid}', 'ApiEmployerReportController@inactiveCompanyCandidates');
+
 
             Route::get('daily-report/{company_id}/{candidate_id}', 'ApiEmployerReportController@dailyReport');
 

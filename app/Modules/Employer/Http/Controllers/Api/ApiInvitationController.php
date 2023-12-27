@@ -65,6 +65,7 @@ class ApiInvitationController extends Controller
     public function store(Request $request, $company_id)
     {
         try {
+            // dd($company_id);
             $user_id = Auth()->id();
             $invitation = new Invitation();
             $invitation->employer_id = $user_id;
@@ -73,6 +74,7 @@ class ApiInvitationController extends Controller
             $invitation->company_id = $company_id;
 
             if ($invitation->save() == true) {
+                // dd($invitation);
                 CompanyCandidate::updateOrCreate([
                     'company_id' => $company_id,
                     'candidate_id' => $request->candidate_id
@@ -89,7 +91,7 @@ class ApiInvitationController extends Controller
                         'title' => 'New Invitation',
                         'body' => 'You have received an invitation from ' .$company->name,
                     ];
-                    $canidate->notify(new FirebaseNotification($data));
+                    // $canidate->notify(new FirebaseNotification($data));
                 }
                 return $this->response->responseSuccessMsg("Successfully Saved", 200);
             }

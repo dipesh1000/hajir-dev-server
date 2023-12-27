@@ -5,7 +5,7 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
+
 
 class FirebaseNotification extends Notification
 {
@@ -17,10 +17,17 @@ class FirebaseNotification extends Notification
         $this->data = $data;
     }
 
+    // public function via($notifiable)
+    // {
+    //     return ['firebase'];
+    // }
+
+   
    
 
     public function toFirebase($notifiable)
     {
+        // dd($notifiable);
         $url = 'https://fcm.googleapis.com/fcm/send';
         $FcmToken = $notifiable->device_token;
         // Replace with your FCM server key
@@ -60,4 +67,6 @@ class FirebaseNotification extends Notification
 
         return $result;
     }
+
+
 }

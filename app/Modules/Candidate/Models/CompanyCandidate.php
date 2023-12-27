@@ -56,9 +56,17 @@ class CompanyCandidate extends Model
         return $q->where('verified_status', 'verified');
     }
 
+    public function scopeNotVerified($q){
+        return $q->where('verified_status', 'not_verified');
+    }
+
 
     public function scopeActive($q){
-        return $q->where('status', 'active');
+        return $q->where('status', 'Active');
+    }
+
+    public function scopeInactive($q){
+        return $q->where('status', 'Inactive');
     }
 
 

@@ -62,14 +62,17 @@ class ApiCandidateLeaveController extends Controller
         try {
             $user_id = auth()->id();
             $userLeaves = Leave::where('candidate_id', $user_id)
-                ->where('company_id', $company_id)
-                ->with(['LeaveType', 'document'])->get();
+                    ->where('company_id', $company_id)
+                    ->with(['LeaveType', 'document'])->get();
             if ($userLeaves) {
-                $approveLeaves = $userLeaves->where('approved', 1);
-                $unapproveLeaves = $userLeaves->where('approved', 0);
-                $candidateLeaves = [
+                $approveLeaves = $userLeaves->approved();
+                $unapproveLeaves = $userLeaves->pending();
+                $rejectedLeaves = $userLeaves->rejected();
+
+                $candidateLeaves = [    
                     'approved_leaves' => CandidateLeaveResource::collection($approveLeaves),
                     'unapproved_leaves' => CandidateLeaveResource::collection($unapproveLeaves),
+                    'rejected_leaves' => CandidateLeaveResource::collection($rejectedLeaves),
                 ];
             }
 

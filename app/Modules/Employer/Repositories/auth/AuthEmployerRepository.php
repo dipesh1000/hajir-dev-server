@@ -227,13 +227,13 @@ class AuthEmployerRepository implements AuthEmployerInterface
                         'otp' => rand(0000, 9999)
                     ]);
                     $message = "Please verify using otp: " . $otp;
-                    $sendSms =  $this->sendSms($user->phone, $message);
-                    if ($sendSms) {
+                    // $sendSms =  $this->sendSms($user->phone, $message);
+                    // if ($sendSms) {
                         return [
                             'otp' => $otp,
                             // 'token' => $token
                         ];
-                    }
+                    // }
                 }
             }
         }

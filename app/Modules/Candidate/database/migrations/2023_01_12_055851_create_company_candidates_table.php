@@ -27,7 +27,7 @@ class CreateCompanyCandidatesTable extends Migration
 
             $table->date('joining_date')->nullable();
 
-            $table->unsignedDouble('allow_late_attendance')->nullable();
+            $table->string('allow_late_attendance')->nullable();
 
             $table->time('office_hour_end')->nullable();
             $table->string('duty_time')->nullable();

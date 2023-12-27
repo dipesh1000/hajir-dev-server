@@ -33,12 +33,11 @@ class CandidateRepository implements CandidateInterface
 
     public function store($request, $company_id)
     {
-        dd('aksdhj');
+       
         $user = User::where('phone', $request->contact)->candidateCheck()->first();
         if (!$user) {
             $user = new User();
-            // $user->name = $request->name;
-            // $user->lastname = $request->lastname;
+            $user->name = $request->name;
             $user->email = $request->email;
             $user->phone = $request->contact;
             $user->email_verified_at = Carbon::now();
@@ -62,15 +61,19 @@ class CandidateRepository implements CandidateInterface
             $companycandidate->code = $request->code;
         } 
 
-        $name_parts = explode(" ", $request->name, 2);
+        // $name_parts = explode(" ", $request->name, 2);
 
-        $companycandidate->name = $name_parts[0];
+        // $companycandidate->name = $name_parts[0];
 
-        // Check if there is a last name
-        if (isset($name_parts[1])) {
-            $companycandidate->lastname = $name_parts[1];
-        }
+        // // Check if there is a last name
+        // if (isset($name_parts[1])) {
+        //     $companycandidate->lastname = $name_parts[1];
+        // }
+        $user->name = $request->name;
+        $user->update();
+        
 
+        $companycandidate->name = $request->name;
         $companycandidate->candidate_id = $user->id;
         $companycandidate->company_id =$company_id;
         $companycandidate->salary_type = $request->salary_type;
@@ -103,8 +106,7 @@ class CandidateRepository implements CandidateInterface
         if ($company) {
             $user = User::where('id', $candidate_id)->first();
             if ($user) {
-                // $user->name = $request->name;
-                // $user->lastname = $request->lastname;
+                $user->name = $request->name;
                 $user->email = $request->email;
                 $user->phone = $request->contact;
                 $user->dob = $request->dob;
@@ -123,15 +125,16 @@ class CandidateRepository implements CandidateInterface
                 }
 
 
-                $name_parts = explode(" ", $request->name, 2);
+                // $name_parts = explode(" ", $request->name, 2);
 
-                $companycandidate->name = $name_parts[0];
+                // $companycandidate->name = $name_parts[0];
 
-                // Check if there is a last name
-                if (isset($name_parts[1])) {
-                    $companycandidate->lastname = $name_parts[1];
-                }
+                // // Check if there is a last name
+                // if (isset($name_parts[1])) {
+                //     $companycandidate->lastname = $name_parts[1];
+                // }
                
+                $companycandidate->name = $user->name;
                 $companycandidate->candidate_id = $candidate_id;
                 $companycandidate->company_id = $company->id;
                 $companycandidate->salary_type = $request->salary_type;

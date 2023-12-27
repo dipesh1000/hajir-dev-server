@@ -21,7 +21,7 @@ class CreateEmployersTable extends Migration
             $table->unsignedBigInteger('country_id')->nullable();
             $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
             $table->string('email')->unique()->nullable();
-            $table->date('dob')->nullable()->nullable();
+            $table->date('dob')->nullable();
             $table->unsignedBigInteger('profile_id')->nullable();
             $table->foreign('profile_id')->references('id')->on('upload_files')->onDelete('set null');
 

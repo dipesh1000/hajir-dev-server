@@ -131,6 +131,7 @@ class ApiEmployerAuthController extends Controller
             if ($user) {
                 $user->name = $request->name;
                 $user->email = $request->email;
+                $user->dob = Carbon::parse($request->dob);
                 if ($request->uploadfile) {
                     $uploaded = $this->file->storeFile($request->uploadfile);
                     $user->image_id = $uploaded->id;

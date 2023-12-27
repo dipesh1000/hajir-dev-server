@@ -69,12 +69,15 @@ class ApiCandidateController extends Controller
     public function getCandidatesByCompany($id)
     {
         try {
-            $conmanyCandidates = CompanyCandidate::where('company_id', $id)->get();
+          
+            $conmanyCandidates = CompanyCandidate::where('company_id', $id)->with('candidate')->get();
             if ($conmanyCandidates) {
+                // $allCandidates = CompanyCandidateResource::collection($conmanyCandidates);
                 $activeCandidates = CompanyCandidateResource::collection($conmanyCandidates->where('status', 'Active'));
                 $inactiveCandidates = CompanyCandidateResource::collection($conmanyCandidates->where('status', 'Inactive'));
             }
             $data = [
+                // 'all_candidates' =>  $allCandidates ?? [],
                 'active_candidates' => $activeCandidates ?? [],
                 'inactive_candidates' => $inactiveCandidates ?? []
             ];

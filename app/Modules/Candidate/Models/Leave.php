@@ -35,9 +35,16 @@ class Leave extends Model
 
 
     public function scopeApproved($q){
-        return $q->where('approved', 1);
+        return $q->where('status', 'Approved');
     }
 
+    public function scopePending($q){
+        return $q->where('status', 'Pending');
+    }
+
+    public function scopeRejected($q){
+        return $q->where('status', 'Rejected');
+    }
 
 
     public function LeaveType(){
