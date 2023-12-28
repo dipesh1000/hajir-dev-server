@@ -423,27 +423,34 @@ class ApiEmployerReportController extends Controller
             $monthEnd = Carbon::parse($date)
                             ->endOfMonth();
             $candidate = CompanyCandidate::where('candidate_id', $candidate_id)->first();
-            $attendances = Attendance::where('candidate_id', $candidate_id)->where('company_id', $companyid)
-                            ->whereBetween('created_at', [$monthStart, $monthEnd]);
+
+            $attendances = Attendance::where('candidate_id', $candidate_id)
+                                ->where('company_id', $companyid)
+                                ->whereBetween('created_at', [$monthStart, $monthEnd]);
 
             $totalearning = $attendances->sum('earning');
             $attendances = $attendances->get();
 
             $companyBusinessLeave = CompanyBusinessleave::where('company_id', $candidate->company_id)->get()
-                ->pluck('business_leave_id')->toArray();
+                                    ->pluck('business_leave_id')->toArray();
 
             $companySpecialLeave = CompanySpecialleave::where('company_id', $candidate->company_id)
-                ->whereBetween('leave_date', [$monthStart, $monthEnd])->get()->pluck('leave_date')->toArray();
+                                    ->whereBetween('leave_date', [$monthStart, $monthEnd])
+                                    ->get()->pluck('leave_date')->toArray();
+
             $companyGovermentLeave = CompanyGovernmentleave::where('company_id', $candidate->company_id)
-                ->whereBetween('leave_date', [$monthStart, $monthEnd])->get()->pluck('leave_date')->toArray();
+                                    ->whereBetween('leave_date', [$monthStart, $monthEnd])
+                                    ->get()->pluck('leave_date')->toArray();
             $reportData = [];
-            for ($i = 0; $i <= $totaldays; $i++) {
+
+            for ($i = 0; $i < $totaldays; $i++) {
                 $day = $monthStart->copy()->addDays($i);
                 $WeekDayNumber = $day->format('w') + 1;
                 $checkAttendance = checkAttendance($day, $attendances);
                 $checkBusinessLeave = checkBusinessLeave($WeekDayNumber, $companyBusinessLeave);
                 $checkSpecialHoliday = checkSpecialHoliday($day->format('Y-m-d'), $companySpecialLeave);
                 $checkGovermentHoliday = checkGovermentHoliday($day->format('Y-m-d'), $companyGovermentLeave);
+
                 if ($checkAttendance) {
                     $reportData[$day->format('Y-m-d')] = $checkAttendance;
                 } elseif ($checkBusinessLeave) {
@@ -457,13 +464,15 @@ class ApiEmployerReportController extends Controller
                 }
             }
 
+
             $reportDataCollection = collect($reportData);
             $counts = array_count_values($reportData);
 
+            // dd($counts);
             $presentCount = $counts['Present'] ?? 0;
             $absentCount = $counts['Absent'] ?? 0;
             $leaveCount = $counts['leave'] ?? 0;
-            $businessleaveCount = $counts['Business Holiday'] ?? 0;
+            $businessleaveCount = $counts['Business Leave'] ?? 0;
             $governmentleaveCount = $counts['Government Holiday'] ?? 0;
             $specialleaveCount = $counts['Special Holiday'] ?? 0;
 
@@ -846,51 +855,39 @@ class ApiEmployerReportController extends Controller
 
 
                 $monthData = [];
+                
                 foreach ($allmonths as $month) {
-
-                     // Get payments for the current month
+                    // Get payments for the current month
                     $paymentsForMonth = $payments->filter(function ($payment) use ($month) {
                         return date('M', strtotime($payment->payment_for_month)) === $month;
                     });
-
+                
                     // Get attendances for the current month
                     $attendancesForMonth = $attendances->filter(function ($attendance) use ($month) {
                         return date('M', strtotime($attendance->created_at)) === $month;
                     });
-
-                   
-
-                        // Initialize status and amount for the current month
-                        $status = "Unpaid";
-                        $amount = 0.00 .'/';
-                        // If there are payments for the current month, update status
-                        if ($paymentsForMonth->count() > 0) {
-                            $status = $paymentsForMonth->status;
-                        }
-
-                        // If there are attendances for the current month, compute the amount
-                        if ($attendancesForMonth->count() > 0) {
-                            $totalAmount = $attendancesForMonth->sum('earning'); // Adjust based on your actual field name if it's different.
-                            $amount = $totalAmount . " /";
-                        }
-
-                        $monthData[] = [
-                            'month' => $month,
-                            'status' => $status,
-                            'amount' => $amount
-                        ];
-
-                        $data = $monthData;
-
-                    // }else{
-                    //     $data = "No Data Avaliable";
-                    // }
+                
+                    // Initialize status and amount for the current month
+                    $status = "Unpaid";
+                    $amount = 0.00 .'/';
+                
+                    // If there are payments for the current month, update status
+                    if ($paymentsForMonth->count() > 0) {
+                        $status = $paymentsForMonth->first()->status; // Fetch status from the first payment
+                    }
+                
+                    // If there are attendances for the current month, compute the amount
+                    if ($attendancesForMonth->count() > 0) {
+                        $totalAmount = $attendancesForMonth->sum('earning'); // Adjust based on your actual field name if it's different.
+                        $amount = number_format($totalAmount, 2, '.', ',') . " /";
+                    }
+                
+                    $monthData[] = [
+                        'month' => $month,
+                        'status' => $status,
+                        'amount' => $amount
+                    ];
                 }
-                // $data = [
-                //     'datas' => YearlyEarningResource::collection($datas),
-                //     'total' => 50000
-                // ];
-
                 return $this->response->responseSuccess($monthData, "Success", 200);
             }
             return $this->response->responseError("Candidate dees not exists");

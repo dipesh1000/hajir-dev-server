@@ -29,13 +29,13 @@ class CandidateStoreRequest extends FormRequest
     {
         return [
 
-            'name' => 'required',
+            'name' => 'required|numeric',
             'contact' =>  ['required', new CompanyCandidateExistsRule],
             'email' => [new CompanyCandidateExistsRule],
             'salary_type' => 'required',
             'duty_time' => 'required',
             'code' => 'required|unique:company_candidates,code',
-            'salary_amount' => 'required',
+            'salary_amount' => 'required|numeric|min:1',
             'joining_date' => 'required',
 
         ];

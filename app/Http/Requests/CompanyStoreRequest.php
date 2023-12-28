@@ -29,14 +29,23 @@ class CompanyStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name' => 'required|string|max:255',
             'phone' => ['required'] ,
+            'address' => ['required','string','max:255'] ,
+
             'office_hour' => 'required',
+            // 'email' => 'required|email',
+            'code' =>'required',
+
+            // 'office_hour => 'required',
+            // 'calculation_type' => 'required',
+            // 'network_ip' => 'required', 
+    
+            // "leave_duration_type" => 'required',
+            // "leave_duration" => 'required',
+            // 'probation_period' => 'required',
         ];
     }
-
-
-
 
     public function messages()
     {

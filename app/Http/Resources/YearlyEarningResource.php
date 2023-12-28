@@ -18,7 +18,7 @@ class YearlyEarningResource extends JsonResource
             ],
             [
                 'month' => "Feb",
-                'status' => "unpaid",
+                'status' => "hold",
                 "amount" => 15000 . '/'
             ],
             [

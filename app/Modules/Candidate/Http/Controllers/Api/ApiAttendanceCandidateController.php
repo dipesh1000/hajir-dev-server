@@ -160,18 +160,19 @@ class ApiAttendanceCandidateController extends Controller
 
     public function attendanceUpdate($companyid = null, $attendanceid = null, Request $request)
     {
-        try {
-
-           
+        try {    
+              
             if ($attendanceid != null) {
+             
                 if ($companyid != null) {
+                     
                     $user = auth()->user();
                     $companycandidate = CompanyCandidate::where('company_id', $companyid)
                         ->where('candidate_id', $user->id)
                         ->where('verified_status', 'verified')
                         ->where('status', 'Active')
                         ->first();
-
+                        
                     if ($companycandidate) {
                         $attendance = Attendance::where('id', $attendanceid)
                             ->where('company_id', $companyid)
@@ -185,15 +186,19 @@ class ApiAttendanceCandidateController extends Controller
                             $attendance->end_time = Carbon::now();
                             $attendance->earning = $earnings['earning'] ?? 0;
                             $attendance->overtime_earning = $earnings['overtime_earning'] ?? 0;
-
                             if ($attendance->update()) {
                                 return $this->response->responseSuccessMsg('Successfully Updated',200);
                             }
                         }
+                        return $this->response->responseError('Something went wrong',400);
+
                     }
+                    return $this->response->responseError('Candidate Not Found',400);
                 }
+                return $this->response->responseError('Company Not Found',400);
             }
-            return $this->response->responseError('Something went wrong',400);
+            return $this->response->responseError('Attendance Not Found',400);
+
         } catch (\Exception $e) {
             return $this->response->responseError($e->getMessage());
         }
@@ -220,10 +225,10 @@ class ApiAttendanceCandidateController extends Controller
 
             if ($companycandidate) {
                 $totalEarning = Attendance::where('candidate_id', $user->id)
-                            ->where('company_id', $companycandidate->company_id)
-                            ->where('employee_status', '!=', 'Absent')
-                            ->where('end_time', '!=', null)->where('start_time', '!=', null)
-                            ->sum('earning');
+                                    ->where('company_id', $companycandidate->company_id)
+                                    ->where('employee_status', '!=', 'Absent')
+                                    ->where('end_time', '!=', null)->where('start_time', '!=', null)
+                                    ->sum('earning');
 
                 $currentMonthDays = 30;
                 $currentMonthWeeks = 4;
@@ -338,9 +343,7 @@ class ApiAttendanceCandidateController extends Controller
             foreach($data as $item){
                 $item->delete();
             }
-                
-            
-                return $this->response->responseSuccessMsg("Successfully Deleted", 200);
+            return $this->response->responseSuccessMsg("Successfully Deleted", 200);
           
         }catch (\Exception $e) {
             return $this->response->responseError($e->getMessage());
