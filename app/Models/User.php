@@ -22,7 +22,6 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
-
     Protected $guard_name ='api';
 
     protected $fillable = [
@@ -36,7 +35,6 @@ class User extends Authenticatable
         'dob',
         'image_id',
         'device_token'
-        
     ];
 
     protected $hidden = [
@@ -50,7 +48,7 @@ class User extends Authenticatable
 
     ];
 
-     // Scopes
+    // Scopes
     public function scopeEmployers($q){
         return $q->where('type',"employer");
     }

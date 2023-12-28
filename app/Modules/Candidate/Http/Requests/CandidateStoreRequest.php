@@ -29,7 +29,7 @@ class CandidateStoreRequest extends FormRequest
     {
         return [
 
-            'name' => 'required|numeric',
+            'name' => 'required',
             'contact' =>  ['required', new CompanyCandidateExistsRule],
             'email' => [new CompanyCandidateExistsRule],
             'salary_type' => 'required',

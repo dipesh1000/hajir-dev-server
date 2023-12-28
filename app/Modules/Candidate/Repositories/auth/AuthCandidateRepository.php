@@ -110,28 +110,32 @@ class AuthCandidateRepository implements AuthCandidateInterface
 
     public function verifyOtp($request)
     {
-
-        $user = User::where('phone', $request->phone)->where('type', 'candidate')->first();
-        if ($user) {
-            $useropt = UserOtp::where('user_id', $user->id)
-                        ->where('otp', $request->otp)
-                        ->first();
-            if ($useropt) {
-                $user->password = bcrypt($request->phone);
-                $user->update();
-                $token = $user->createToken('API Token')->accessToken;
-                if ($request->otp == $useropt->otp) {
-                    $user->otp = $request->otp;
-                    return [
-                        'user' => $user,
-                        'token' =>  $token
-                    ];
+        if($request->device_token == null){
+            throw new Exception("Device Token Not Found. Please Send Device Token.");
+        }else{
+            $user = User::where('phone', $request->phone)->where('type', 'candidate')->first();
+            if ($user) {
+                $useropt = UserOtp::where('user_id', $user->id)
+                            ->where('otp', $request->otp)
+                            ->first();
+                if ($useropt) {
+                    $user->password = bcrypt($request->phone);
+                    $user->device_token = $request->device_token; //Enable It After Confirmation.
+                    $user->update();
+                    $token = $user->createToken('API Token')->accessToken;
+                    if ($request->otp == $useropt->otp) {
+                        $user->otp = $request->otp;
+                        return [
+                            'user' => $user,
+                            'token' =>  $token
+                        ];
+                    }
+                    throw new Exception("OTP Does Not Match. Please Enter Correct OTP.");
                 }
-                throw new Exception("OTP Does Not Match. Please Enter Correct OTP.");
+                throw new Exception("OTP Not Found. Please Request New OTP and Verify.");
             }
-            throw new Exception("OTP Not Found. Please Request New OTP and Verify.");
+            throw new Exception("User Not Found",404);
         }
-        throw new Exception("User Not Found",404);
     }
 
 
