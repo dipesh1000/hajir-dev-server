@@ -29,7 +29,7 @@ class CompanyStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:companies,name',
             'phone' => ['required'] ,
             'address' => ['required','string','max:255'] ,
 
@@ -51,6 +51,7 @@ class CompanyStoreRequest extends FormRequest
     {
         return [
             'name.required' => 'Name is required',
+            'name.unique' => 'Company Name already exists.',
             'phone.required' => 'Phone is required',
             'office_hour.required' => 'Office hour is required',
             'phone.digits' => 'Phone must be of exact 10 digits',

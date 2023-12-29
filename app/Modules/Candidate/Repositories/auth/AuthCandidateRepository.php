@@ -110,9 +110,9 @@ class AuthCandidateRepository implements AuthCandidateInterface
 
     public function verifyOtp($request)
     {
-        if($request->device_token == null){
-            throw new Exception("Device Token Not Found. Please Send Device Token.");
-        }else{
+        // if($request->device_token == null){
+        //     throw new Exception("Device Token Not Found. Please Send Device Token.");
+        // }else{
             $user = User::where('phone', $request->phone)->where('type', 'candidate')->first();
             if ($user) {
                 $useropt = UserOtp::where('user_id', $user->id)
@@ -120,7 +120,7 @@ class AuthCandidateRepository implements AuthCandidateInterface
                             ->first();
                 if ($useropt) {
                     $user->password = bcrypt($request->phone);
-                    $user->device_token = $request->device_token; //Enable It After Confirmation.
+                    // $user->device_token = $request->device_token; //Enable It After Confirmation.
                     $user->update();
                     $token = $user->createToken('API Token')->accessToken;
                     if ($request->otp == $useropt->otp) {
@@ -135,7 +135,7 @@ class AuthCandidateRepository implements AuthCandidateInterface
                 throw new Exception("OTP Not Found. Please Request New OTP and Verify.");
             }
             throw new Exception("User Not Found",404);
-        }
+        // }
     }
 
 

@@ -149,12 +149,12 @@ class ApiEmployerReportController extends Controller
     {
         try {
             $companyCandidates = CompanyCandidate::where('company_id', $id)
-                ->inactive()->verified()
-                ->with([
-                    'candidate', 'activecompanyCandidateAttendaces'
-                ])
-                ->whereDoesntHave('activecompanyCandidateAttendaces')
-                ->get();
+                        ->active()->verified()
+                        ->with([
+                            'candidate', 'activecompanyCandidateAttendaces'
+                        ])
+                        ->whereDoesntHave('todayattendances')
+                        ->get();
 
             if ($companyCandidates) {
                 $candidates =  CompanyCandidateDailyAttendanceReport::collection($companyCandidates);

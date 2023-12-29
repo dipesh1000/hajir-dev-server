@@ -33,6 +33,9 @@ class BusinessLeavedaySeeder extends Seeder
             [
                 'title' => 'Friday'
             ],
+            [
+                'title' => 'Saturday'
+            ],
         ];
 
         foreach($leavedays as $leaveday){

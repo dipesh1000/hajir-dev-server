@@ -118,7 +118,7 @@ class CompanyCandidate extends Model
 
     public function activecompanyCandidateAttendaces(){
         return $this->belongsTo(Attendance::class, 'candidate_id', 'candidate_id')
-        ->where('created_at', Carbon::parse(today()))->whereNull('end_time');
+                    ->where('created_at', Carbon::parse(today()))->whereNull('end_time');
     }
 
     public function invitation(){

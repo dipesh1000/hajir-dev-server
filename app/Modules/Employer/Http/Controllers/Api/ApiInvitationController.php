@@ -17,10 +17,11 @@ use Illuminate\Support\Facades\Auth;
 class ApiInvitationController extends Controller
 {
 
-    protected $response;
+    protected $response,$notification;
     public function __construct(ResponseService $response)
     {
         $this->response = $response;
+        // $this->notification = $notification;
     }
 
     public function index($company_id)
@@ -89,13 +90,17 @@ class ApiInvitationController extends Controller
                     ]);
 
                     $company = Company::where('id', $company_id)->first();
-                    $data = [
-                        'type' => 'invitation',
-                        'type_id' => $newinvitation->id,
-                        'title' => 'New Invitation',
-                        'body' => 'You have received an invitation from ' .$company->name,
-                    ];
-                                                
+                    if($canidate->device_token != null){
+                        $notify_details = [
+                            'device_token' => $canidate->device_token,
+                            'type' => 'invitation',
+                            'type_id' => $newinvitation->id,
+                            'title' => 'New Invitation',
+                            'body' => 'You have received an invitation from ' .$company->name,
+                        ];
+                        // $notify = $this->notification->toFirebase($notify_details);
+                    }
+                                      
                     return $this->response->responseSuccessMsg("Successfully Saved", 200);
                 }
                 return $this->response->responseError("Something Went Wrong While Saving. Please Try Again.",400);

@@ -212,19 +212,19 @@ class AuthEmployerRepository implements AuthEmployerInterface
         $user = User::where('id', auth()->user()->id)->first();
         if ($user) {
             $otherUsers = User::where('id', '!=', $user->id)
-                    ->where('type', 'employer')
-                    ->where('phone', $request->old_phone)
-                    ->exists();
+                            ->where('type', 'employer')
+                            ->where('phone', $request->old_phone)
+                            ->exists();
 
             if ($otherUsers == true) {
-                throw new Exception("Phone number already exists");
+                throw new Exception("Phone number already exists",400);
             } else {
                 $user->phone = $request->new_phone;
                 if ($user->update() == true) {
                     $otp = $user->otp->updateOrCreate([
                         'user_id' => $user->id
                     ], [
-                        'otp' => rand(0000, 9999)
+                        'otp' => mt_rand(1000, 9999)
                     ]);
                     $message = "Please verify using otp: " . $otp;
                     // $sendSms =  $this->sendSms($user->phone, $message);
