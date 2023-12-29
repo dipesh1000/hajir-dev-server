@@ -138,17 +138,19 @@ class ApiEmployerAuthController extends Controller
                 }
                 if ($user->update()) {
                     $employer = Employer::where('user_id', $user->id)->first();
-                    $employer->name = $request->name;
-                    $employer->email = $request->email;
-                    if ($request->uploadfile) {
-                        $uploaded = $this->file->storeFile($request->uploadfile);
-                        $employer->profile_id = $uploaded->id;
+                    if($employer){
+                        $employer->name = $request->name;
+                        $employer->email = $request->email;
+                        if ($request->uploadfile) {
+                            $uploaded = $this->file->storeFile($request->uploadfile);
+                            $employer->profile_id = $uploaded->id;
+                        }
+                        $employer->dob = Carbon::parse($request->dob);
+                        if ($employer->update()) {
+                            return $this->response->responseSuccessMsg("Successfully Updated",200);
+                        }
                     }
-                    $employer->dob = Carbon::parse($request->dob);
-                    if ($employer->update()) {
-                        return $this->response->responseSuccessMsg("Successfully Updated",200);
-                    }
-                    return $this->response->responseError("Something went wrong while updating employer",400);
+                    return $this->response->responseSuccessMsg("Successfully Updated",200);
                 }
                 return $this->response->responseError("Something went wrong while updating employer",400);
             }

@@ -133,6 +133,17 @@ class ApiAttendanceCandidateController extends Controller
                     $employee_status = 'Late';
                 }
 
+                $checkAttendance = Attendance::where('end_time',null)
+                                    ->where('candidate_id', $user->id)
+                                    ->where('start_time','!=',null)
+                                    ->where('created_at',$todayDate)
+                                    ->where('company_id','!=',$companyid)
+                                    ->latest()->first();
+
+                if($checkAttendance){
+                    return $this->response->responseError('You are already clocked in to another company. Please clock out from another company.',400);
+                }
+
                 $attendance = Attendance::updateOrCreate(
                     [
                         'candidate_id' => auth()->user()->id,
@@ -209,19 +220,18 @@ class ApiAttendanceCandidateController extends Controller
     {
         try {
             $user = auth()->user();
-            // dd($user);
             $todayDate = Carbon::today();
             $attendance = Attendance::where('created_at', $todayDate)
-                        ->where('candidate_id', $user->id)
-                        ->where('company_id', $company_id)
-                        ->with('breaks','currentBreak')
-                        ->first();
+                            ->where('candidate_id', $user->id)
+                            ->where('company_id', $company_id)
+                            ->with('breaks','currentBreak')
+                            ->first();
 
             $companycandidate = CompanyCandidate::where('company_id', $company_id)
-                        ->where('candidate_id', $user->id)
-                        ->where('verified_status', 'verified')
-                        ->where('status', 'Active')
-                        ->first();
+                            ->where('candidate_id', $user->id)
+                            ->where('verified_status', 'verified')
+                            ->where('status', 'Active')
+                            ->first();
 
             if ($companycandidate) {
                 $totalEarning = Attendance::where('candidate_id', $user->id)

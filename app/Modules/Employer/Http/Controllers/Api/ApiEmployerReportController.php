@@ -78,9 +78,9 @@ class ApiEmployerReportController extends Controller
                         ->verified()->count();
                
             $data = [
-                'total_attendee' =>  $totalattendee ?? 0,
+                'total_attendee' => $totalattendee ?? 0,
                 'present' => $presentCount ?? 0,
-                'late' =>  $lateCount  ?? 0,
+                'late' => $lateCount  ?? 0,
                 'absent' => $absentCount ?? 0,
                 'candidates' => $companyCandidates ?? [],
                 // 'candidates' => CandidateResource::collection($companyCandidates)
@@ -123,14 +123,14 @@ class ApiEmployerReportController extends Controller
     {
         try {
             $companyCandidates = CompanyCandidate::where('company_id', $id)
-                ->active()->verified()
-                ->with([
-                    'candidate', 'activecompanyCandidateAttendaces'
-                ])
-                ->whereHas('activecompanyCandidateAttendaces', function ($q) {
-                    $q->whereIn('employee_status', ['Present', 'Late']);
-                })
-                ->get();
+                                ->active()->verified()
+                                ->with([
+                                    'candidate', 'activecompanyCandidateAttendaces'
+                                ])
+                                ->whereHas('activecompanyCandidateAttendaces', function ($q) {
+                                    $q->whereIn('employee_status', ['Present', 'Late']);
+                                })
+                                ->get();
 
             if ($companyCandidates && $companyCandidates) {
                 $candidates =  CompanyCandidateDailyAttendanceReport::collection($companyCandidates);

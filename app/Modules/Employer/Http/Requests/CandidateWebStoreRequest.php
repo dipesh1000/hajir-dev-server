@@ -47,7 +47,6 @@ class CandidateWebStoreRequest extends FormRequest
             "code.required" => "Code is required",
             "salary_amount.required" => "Salary amount is required",
             "joining_date.required" => "Joining date is required is required",
-
         ];
     }
 

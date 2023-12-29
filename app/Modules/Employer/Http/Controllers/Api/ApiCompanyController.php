@@ -6,6 +6,7 @@ use App\GlobalServices\ResponseService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CompanyStoreRequest;
+use App\Http\Requests\CompanyUpdateRequest;
 use Employer\Http\Resources\CompanyResource;
 use Employer\Models\Company;
 use Employer\Repositories\company\CompanyInterface;
@@ -155,7 +156,7 @@ class ApiCompanyController extends Controller
         }
     }
 
-    public function update(CompanyStoreRequest $request, $id)
+    public function update(CompanyUpdateRequest $request, $id)
     {
         try {
             $companystore = $this->company->update($request, $id);

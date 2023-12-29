@@ -62,7 +62,7 @@ class ApiEmployerOverallReportController extends Controller
 
             // dd($totalattendee,$presentCount,$absentCount,$lateCount);
             $data = [
-                'total_attendee' =>   $totalattendee ?? 0,
+                'total_attendee' =>  $totalattendee ?? 0,
                 'present' => $presentCount ?? 0,
                 'absent' => $absentCount ?? 0,
                 'late' => $lateCount ?? 0,

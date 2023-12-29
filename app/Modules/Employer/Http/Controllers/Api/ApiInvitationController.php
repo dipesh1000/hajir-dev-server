@@ -18,10 +18,10 @@ class ApiInvitationController extends Controller
 {
 
     protected $response,$notification;
-    public function __construct(ResponseService $response)
+    public function __construct(ResponseService $response, FirebaseNotification $notification) 
     {
         $this->response = $response;
-        // $this->notification = $notification;
+        $this->notification = $notification;
     }
 
     public function index($company_id)
@@ -98,7 +98,7 @@ class ApiInvitationController extends Controller
                             'title' => 'New Invitation',
                             'body' => 'You have received an invitation from ' .$company->name,
                         ];
-                        // $notify = $this->notification->toFirebase($notify_details);
+                        $notify = $this->notification->toFirebase($notify_details);
                     }
                                       
                     return $this->response->responseSuccessMsg("Successfully Saved", 200);
