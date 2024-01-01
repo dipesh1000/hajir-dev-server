@@ -44,7 +44,6 @@ class ApiCandidateAuthController extends Controller
         }
     }
 
-
     public function verifyOtp(Request $request)
     {
         try {
